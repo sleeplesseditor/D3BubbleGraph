@@ -42,10 +42,33 @@ var yLabel = g.append("text")
 var timeLabel = g.append("text")
     .attr("y", height -10)
     .attr("x", width - 40)
-    .attr("font-size", "40px")
+    .attr("font-size", "30px")
     .attr("opacity", "0.4")
     .attr("text-anchor", "middle")
     .text("1800");
+
+var continents = ["Europe", "Asia", "Americas", "Africa"];
+
+var legend = g.append("g")
+    .attr("transform", "translate(" + (width - 10) + 
+        "," + (height - 125) + ")");
+
+continents.forEach(function(continent, i){
+    var legendRow = legend.append("g")
+        .attr("transform", "translate(0, " + (i * 20) + ")");
+
+    legendRow.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", continentColor(continent));
+
+    legendRow.append("text")
+        .attr("x", -10)
+        .attr("y", 10)
+        .attr("text-anchor", "end")
+        .style("text-transform", "capitalize")
+        .text(continent);
+});
 
 // X Axis
 var xAxisCall = d3.axisBottom(x)
@@ -108,7 +131,7 @@ function update(data) {
         .attr("fill", function(d) { return continentColor(d.continent); })
         .merge(circles)
         .transition(t)
-            .attr("cy", function(d){ return y(d.life_exp); })
+            .attr("cy", function(d){ return y(d.life_exp) })
             .attr("cx", function(d){ return x(d.income) })
             .attr("r", function(d){ return Math.sqrt(area(d.population) / Math.PI) });
 
